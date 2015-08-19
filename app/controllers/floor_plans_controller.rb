@@ -1,4 +1,5 @@
 class FloorPlansController < ApplicationController
+  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
   before_action :set_floor_plan, only: [:show, :edit, :update, :destroy]
 
   respond_to :html
@@ -21,7 +22,7 @@ class FloorPlansController < ApplicationController
   end
 
   def create
-    @floor_plan = FloorPlan.new(floor_plan_params)
+    @floor_plan = current_user.floor_plans.build(floor_plan_params)
     @floor_plan.save
     respond_with(@floor_plan)
   end
@@ -38,7 +39,11 @@ class FloorPlansController < ApplicationController
 
   private
     def set_floor_plan
-      @floor_plan = FloorPlan.find(params[:id])
+      if user_signed_in? 
+        @floor_plan = current_user.floor_plans.find(params[:id])
+      else
+        @floor_plan = FloorPlan.find(params[:id])
+      end
     end
 
     def floor_plan_params
