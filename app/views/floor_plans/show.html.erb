@@ -12,7 +12,7 @@
 
 <p>
   <strong>Image:</strong>
-  <%= @floor_plan.image %>
+  <%= raw @floor_plan.image.file.read %>
 </p>
 
 <%= link_to 'Edit', edit_floor_plan_path(@floor_plan) %> |
